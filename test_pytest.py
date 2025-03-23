@@ -23,6 +23,13 @@ def mock_response():
         # Simulamos la respuesta para eliminar una película
         m.delete('http://localhost:5000/peliculas/1', status_code=200)
 
+        # Simulamos la respuesta para buscar películas por título
+        m.get('http://localhost:5000/peliculas/buscar?titulo=in', json=[
+            {'id': 1, 'titulo': 'Indiana Jones', 'genero': 'Acción'},
+            {'id': 2, 'titulo': 'Star Wars', 'genero': 'Acción'},
+            {'id': 3, 'titulo': 'Interstellar', 'genero': 'Ciencia ficción'}
+        ])
+
         yield m
 
 def test_obtener_peliculas(mock_response):
@@ -50,3 +57,9 @@ def test_actualizar_detalle_pelicula(mock_response):
 def test_eliminar_pelicula(mock_response):
     response = requests.delete('http://localhost:5000/peliculas/1')
     assert response.status_code == 200
+
+def test_buscar_por_titulo(mock_response):
+    termino_busqueda = 'in'
+    response = requests.get(f'http://localhost:5000/peliculas/buscar?titulo={termino_busqueda}')
+    assert response.status_code == 200
+    assert len(response.json()) == 3
