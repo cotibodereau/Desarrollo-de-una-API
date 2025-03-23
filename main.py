@@ -44,7 +44,15 @@ def actualizar_pelicula(id):
 
 def eliminar_pelicula(id):
     # Lógica para buscar la película por su ID y eliminarla
-    return jsonify({'mensaje': 'Película eliminada correctamente'})
+
+    # Busco la película por su ID
+    for pelicula in peliculas: # Recorremos la lista
+        if pelicula['id'] == id:
+            peliculas.remove(pelicula)  # Eliminar la película de la lista
+            return jsonify({"mensaje": "Película eliminada"}), 200  # Exito
+        
+    # Si no encontro una pelicula por id, devolvemos error
+    return jsonify({'Error': 'Película no encontrada'}), 404
 
 
 def obtener_nuevo_id():
