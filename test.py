@@ -55,3 +55,15 @@ if response.status_code == 200:
     print("Película eliminada correctamente.")
 else:
     print("Error al eliminar la película.")
+    
+# Sugerir pelicula aleatoria por su genero
+
+# Hacer una solicitud GET al servidor para obtener la película según el género
+response = requests.get(f'http://localhost:5000/peliculas/sugerir/{genero}')
+if response.status_code == 200:
+    pelicula = response.json()
+    print("Detalles de la película:")
+    print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
+else:
+    print("Error al obtener los detalles de la película.")
+print()
