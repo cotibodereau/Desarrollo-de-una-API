@@ -69,5 +69,22 @@ app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['P
 app.add_url_rule('/peliculas/<int:id>', 'actualizar_pelicula', actualizar_pelicula, methods=['PUT'])
 app.add_url_rule('/peliculas/<int:id>', 'eliminar_pelicula', eliminar_pelicula, methods=['DELETE'])
 
+@app.route('/peliculas/sugerir/<string:genero>', methods=['GET'])
+def sugerir_pelicula_aleatoria_genero(genero):
+    #Sugerimos pelicula aleatorio segun el genero
+
+    # Filtrar películas por género (ignorando mayúsculas/minúsculas)
+    peliculas_filtradas = [
+        pelicula for pelicula in peliculas 
+        if pelicula['genero'].lower() == genero.lower()
+    ]
+    if not peliculas_filtradas:
+        return jsonify({"error": "No se encontraron películas para ese género"}), 404
+    
+    # Seleccionar una película aleatoria del listado filtrado
+    pelicula_seleccionada = random.choice(peliculas_filtradas)
+
+    return jsonify(pelicula_seleccionada), 200 # Exito
+
 if __name__ == '__main__':
     app.run()
