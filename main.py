@@ -49,6 +49,13 @@ def eliminar_pelicula(id):
     return jsonify({'mensaje': 'Película eliminada correctamente'})
 
 
+@app.route('/peliculas/buscar', methods=['GET'])
+def buscar_por_titulo():
+    termino_busqueda = request.args.get('titulo', '').lower()
+    resultado = [p for p in peliculas if termino_busqueda in p['titulo'].lower()]
+    return jsonify(resultado)
+    
+    
 def obtener_nuevo_id():
     if len(peliculas) > 0:
         ultimo_id = peliculas[-1]['id']
