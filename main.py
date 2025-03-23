@@ -22,8 +22,10 @@ def obtener_peliculas():
 
 
 def obtener_pelicula(id):
-    # Lógica para buscar la película por su ID y devolver sus detalles
-    return jsonify(pelicula_encontrada)
+    for pelicula in peliculas:
+        if pelicula ['id']==id:
+            return jsonify(pelicula )
+    return jsonify({"mensaje" : "Pelicula no encontrada"}), 404 #Not Found
 
 
 def agregar_pelicula():
