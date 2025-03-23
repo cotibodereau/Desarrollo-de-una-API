@@ -22,6 +22,11 @@ def mock_response():
 
         # Simulamos la respuesta para eliminar una película
         m.delete('http://localhost:5000/peliculas/1', status_code=200)
+        
+        # Simulamos la respuesta para obtener pelicula aleatorio por su genero
+        m.get('http://localhost:5000/peliculas/sugerir/Drama', json=
+            {'id': 12, 'titulo': 'Fight Club', 'genero': 'Drama'
+        })
 
         yield m
 
@@ -50,3 +55,11 @@ def test_actualizar_detalle_pelicula(mock_response):
 def test_eliminar_pelicula(mock_response):
     response = requests.delete('http://localhost:5000/peliculas/1')
     assert response.status_code == 200
+    
+def test_pelicula_aleatoria_genero(mock_response):
+    # Hacer una solicitud GET al servidor para obtener la película según el género
+    response = requests.get('http://localhost:5000/peliculas/sugerir/Drama')
+    assert response.status_code == 200
+
+    # Verificamos si encontro coincidencia 
+    assert response.json()['genero'] == 'Drama'
