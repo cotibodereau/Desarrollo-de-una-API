@@ -1,5 +1,14 @@
 import requests
 
+BASE_URL = 'http://localhost:5000'
+
+def print_response(label, response):
+    print(f"\n{label} ({response.status_code}):")
+    try:
+        print(response.json())
+    except:
+        print(response.text)
+
 # Obtener todas las películas
 response = requests.get('http://localhost:5000/peliculas')
 peliculas = response.json()
@@ -55,3 +64,7 @@ if response.status_code == 200:
     print("Película eliminada correctamente.")
 else:
     print("Error al eliminar la película.")
+
+# Filtrar por género
+response = requests.get(f'{BASE_URL}/peliculas/genero/Aventura')
+print_response("Películas de Aventura", response)
