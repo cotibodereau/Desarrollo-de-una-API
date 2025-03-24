@@ -68,3 +68,7 @@ else:
 # Filtrar por género
 response = requests.get(f'{BASE_URL}/peliculas/genero/Aventura')
 print_response("Películas de Aventura", response)
+
+# Recomendación para feriado
+response = requests.get(f'{BASE_URL}/recomendar/Acción?tipo=inmovable')
+print_response("Recomendar para feriado", response)

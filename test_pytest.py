@@ -64,3 +64,4 @@ def test_filtrar_por_genero(mock_response):
     response = requests.get('http://localhost:5000/peliculas/genero/Acción')
     assert response.status_code == 200
     assert len(response.json()) == 2  # Verificar que hay 2 películas de Acción
+

@@ -1,8 +1,9 @@
 import requests
 from datetime import date
 
-def get_url(year):
-    return f"https://nolaborables.com.ar/api/v2/feriados/{year}"
+def get_url(year, tipo=None):
+    base_url = f"https://nolaborables.com.ar/api/v2/feriados/{year}"
+    return f"{base_url}?tipo={tipo}" if tipo else base_url
 
 months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
@@ -31,10 +32,16 @@ class NextHoliday:
         self.loading = False
         self.holiday = holiday
 
-    def fetch_holidays(self):
-        response = requests.get(get_url(self.year))
-        data = response.json()
-        self.set_next(data)
+    # Método único para fetch_holidays con parámetro tipo
+    def fetch_holidays(self, tipo=None):
+        try:
+            response = requests.get(get_url(self.year, tipo))
+            response.raise_for_status()  # Lanza error si HTTP != 200
+            data = response.json()
+            self.set_next(data)
+        except requests.exceptions.RequestException as e:
+            print(f"Error al obtener feriados: {e}")
+            self.holiday = None
 
     def render(self):
         if self.loading:
