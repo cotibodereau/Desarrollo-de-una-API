@@ -26,8 +26,8 @@ def mock_response():
         # Simulamos la respuesta para buscar películas por título
         m.get('http://localhost:5000/peliculas/buscar?titulo=in', json=[
             {'id': 1, 'titulo': 'Indiana Jones', 'genero': 'Acción'},
-            {'id': 2, 'titulo': 'Star Wars', 'genero': 'Acción'},
-            {'id': 3, 'titulo': 'Interstellar', 'genero': 'Ciencia ficción'}
+            {'id': 3, 'titulo': 'Interstellar', 'genero': 'Ciencia ficción'},
+            {'id': 4, 'titulo': 'Lord of the Rings', 'genero': 'Fantasía'}
         ])
 
         yield m
