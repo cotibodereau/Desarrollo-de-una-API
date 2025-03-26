@@ -10,7 +10,7 @@ def print_response(label, response):
         print(response.text)
 
 # Obtener todas las películas
-response = requests.get('http://localhost:5000/peliculas')
+response = requests.get(f'{BASE_URL}/peliculas')
 peliculas = response.json()
 print("Películas existentes:")
 for pelicula in peliculas:
@@ -22,7 +22,7 @@ nueva_pelicula = {
     'titulo': 'Pelicula de prueba',
     'genero': 'Acción'
 }
-response = requests.post('http://localhost:5000/peliculas', json=nueva_pelicula)
+response = requests.post(f'{BASE_URL}/peliculas', json=nueva_pelicula)
 if response.status_code == 201:
     pelicula_agregada = response.json()
     print("Película agregada:")
@@ -32,8 +32,9 @@ else:
 print()
 
 # Obtener detalles de una película específica
-id_pelicula = 1  # ID de la película a obtener
-response = requests.get(f'http://localhost:5000/peliculas/{id_pelicula}')
+# Utiliza el ultimo id de la lista de peliculas
+id_pelicula = peliculas[-1]['id']
+response = requests.get(f'{BASE_URL}/peliculas/{id_pelicula}')
 if response.status_code == 200:
     pelicula = response.json()
     print("Detalles de la película:")
@@ -43,12 +44,13 @@ else:
 print()
 
 # Actualizar los detalles de una película
-id_pelicula = 1  # ID de la película a actualizar
+# Utiliza el ultimo id de la lista de peliculas
+id_pelicula = peliculas[-1]['id']
 datos_actualizados = {
     'titulo': 'Nuevo título',
     'genero': 'Comedia'
 }
-response = requests.put(f'http://localhost:5000/peliculas/{id_pelicula}', json=datos_actualizados)
+response = requests.put(f'{BASE_URL}/peliculas/{id_pelicula}', json=datos_actualizados)
 if response.status_code == 200:
     pelicula_actualizada = response.json()
     print("Película actualizada:")
@@ -58,27 +60,30 @@ else:
 print()
 
 # Eliminar una película
-id_pelicula = 1  # ID de la película a eliminar
-response = requests.delete(f'http://localhost:5000/peliculas/{id_pelicula}')
+# Utiliza el ultimo id de la lista de peliculas
+id_pelicula = peliculas[-1]['id']
+response = requests.delete(f'{BASE_URL}/peliculas/{id_pelicula}')
 if response.status_code == 200:
     print("Película eliminada correctamente.")
 else:
     print("Error al eliminar la película.")
+print()
 
 # Buscar pelicula por titulo
 termino_busqueda = 'in'
-response = requests.get(f'http://localhost:5000/peliculas/buscar?titulo={termino_busqueda}')
+response = requests.get(f'{BASE_URL}/peliculas/buscar?titulo={termino_busqueda}')
 if response.status_code == 200:
-    pelicula = response.json()
+    peliculas_encontradas = response.json()
     print("Peliculas encontradas:")
-    for pelicula in pelicula:
+    for pelicula in peliculas_encontradas:
         print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
 else:
     print("Error al buscar la pelicula")    
-# Sugerir pelicula aleatoria por su genero
+print()
 
-# Hacer una solicitud GET al servidor para obtener la película según el género
-response = requests.get(f'http://localhost:5000/peliculas/sugerir/{genero}')
+# Sugerir pelicula aleatoria por su genero
+genero = 'Acción'
+response = requests.get(f'{BASE_URL}/peliculas/sugerir/{genero}')
 if response.status_code == 200:
     pelicula = response.json()
     print("Detalles de la película:")
@@ -90,18 +95,14 @@ print()
 # Filtrar por género
 response = requests.get(f'{BASE_URL}/peliculas/genero/Aventura')
 print_response("Películas de Aventura", response)
+print()
 
 # Recomendación para feriado
 response = requests.get(f'{BASE_URL}/recomendar/Acción?tipo=inmovable')
 print_response("Recomendar para feriado", response)
+print()
 
 # Test para sugerir película aleatoria
 response = requests.get(f'{BASE_URL}/peliculas/sugerir')
 print_response("Sugerir película aleatoria", response)
-
-if response.status_code == 200:
-    pelicula = response.json()
-    print("Detalles de la película sugerida:")
-    print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
-else:
-    print("Error al sugerir película aleatoria.")
+print()
