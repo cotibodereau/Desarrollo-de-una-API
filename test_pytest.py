@@ -67,7 +67,7 @@ def test_filtrar_por_genero(mock_response):
 
 
 def test_recomendar_feriado(mock_response):
-    # Add mock for the holiday recommendation endpoint
+
     mock_response.get(
         'http://localhost:5000/recomendar/Acción',
         json={
@@ -81,8 +81,7 @@ def test_recomendar_feriado(mock_response):
             }
         }
     )
-    
-    # Test with default (no specific holiday type)
+
     response = requests.get('http://localhost:5000/recomendar/Acción')
     assert response.status_code == 200
     
@@ -92,3 +91,26 @@ def test_recomendar_feriado(mock_response):
     assert 'tipo' in data
     assert 'pelicula' in data
     assert data['pelicula']['genero'] == 'Acción'
+
+def test_sugerir_pelicula_aleatoria(mock_response):
+
+    mock_response.get(
+        'http://localhost:5000/peliculas/sugerir',
+        json={
+            'id': 1, 
+            'titulo': 'Indiana Jones', 
+            'genero': 'Acción'
+        }
+    )
+    
+    response = requests.get('http://localhost:5000/peliculas/sugerir')
+    
+    assert response.status_code == 200
+    
+    pelicula = response.json()
+    assert 'id' in pelicula
+    assert 'titulo' in pelicula
+    assert 'genero' in pelicula
+
+    assert pelicula['titulo'] == 'Indiana Jones'
+    assert pelicula['genero'] == 'Acción'

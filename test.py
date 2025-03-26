@@ -72,3 +72,14 @@ print_response("Películas de Aventura", response)
 # Recomendación para feriado
 response = requests.get(f'{BASE_URL}/recomendar/Acción?tipo=inmovable')
 print_response("Recomendar para feriado", response)
+
+# Test para sugerir película aleatoria
+response = requests.get(f'{BASE_URL}/peliculas/sugerir')
+print_response("Sugerir película aleatoria", response)
+
+if response.status_code == 200:
+    pelicula = response.json()
+    print("Detalles de la película sugerida:")
+    print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
+else:
+    print("Error al sugerir película aleatoria.")
