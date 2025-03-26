@@ -55,7 +55,17 @@ if response.status_code == 200:
     print("Película eliminada correctamente.")
 else:
     print("Error al eliminar la película.")
-    
+
+# Buscar pelicula por titulo
+termino_busqueda = 'in'
+response = requests.get(f'http://localhost:5000/peliculas/buscar?titulo={termino_busqueda}')
+if response.status_code == 200:
+    pelicula = response.json()
+    print("Peliculas encontradas:")
+    for pelicula in pelicula:
+        print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
+else:
+    print("Error al buscar la pelicula")    
 # Sugerir pelicula aleatoria por su genero
 
 # Hacer una solicitud GET al servidor para obtener la película según el género
