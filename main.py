@@ -50,7 +50,15 @@ def actualizar_pelicula(id):
 
 def eliminar_pelicula(id):
     # Lógica para buscar la película por su ID y eliminarla
-    return jsonify({'mensaje': 'Película eliminada correctamente'})
+
+    # Busco la película por su ID
+    for pelicula in peliculas: # Recorremos la lista
+        if pelicula['id'] == id:
+            peliculas.remove(pelicula)  # Eliminar la película de la lista
+            return jsonify({"mensaje": "Película eliminada"}), 200  # Exito
+        
+    # Si no encontro una pelicula por id, devolvemos error
+    return jsonify({'Error': 'Película no encontrada'}), 404
 
 
 @app.route('/peliculas/buscar', methods=['GET'])
@@ -73,6 +81,23 @@ app.add_url_rule('/peliculas/<int:id>', 'obtener_pelicula', obtener_pelicula, me
 app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['POST'])
 app.add_url_rule('/peliculas/<int:id>', 'actualizar_pelicula', actualizar_pelicula, methods=['PUT'])
 app.add_url_rule('/peliculas/<int:id>', 'eliminar_pelicula', eliminar_pelicula, methods=['DELETE'])
+
+@app.route('/peliculas/sugerir/<string:genero>', methods=['GET'])
+def sugerir_pelicula_aleatoria_genero(genero):
+    #Sugerimos pelicula aleatorio segun el genero
+
+    # Filtrar películas por género (ignorando mayúsculas/minúsculas)
+    peliculas_filtradas = [
+        pelicula for pelicula in peliculas 
+        if pelicula['genero'].lower() == genero.lower()
+    ]
+    if not peliculas_filtradas:
+        return jsonify({"error": "No se encontraron películas para ese género"}), 404
+    
+    # Seleccionar una película aleatoria del listado filtrado
+    pelicula_seleccionada = random.choice(peliculas_filtradas)
+
+    return jsonify(pelicula_seleccionada), 200 # Exito
 
 if __name__ == '__main__':
     app.run()
