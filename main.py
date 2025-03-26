@@ -93,6 +93,20 @@ def recomendar_feriado(genero):
         }), 200
     except Exception as e:
         return jsonify({'error': f'Error interno: {str(e)}'}), 500
+
+@app.route('/peliculas/sugerir', methods=['GET'])
+def sugerir_aleatoria():
+    if not peliculas:
+        return jsonify({'error': 'No hay películas disponibles'}), 404
+    try:
+        pelicula_sugerida = random.choice(peliculas)
+        return jsonify(pelicula_sugerida), 200
+    
+    except Exception as e:
+        return jsonify({
+            'error': 'Error interno al sugerir película', 
+            'detalle': str(e)
+        }), 500
     
 
 if __name__ == '__main__':
