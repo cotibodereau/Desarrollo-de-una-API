@@ -77,3 +77,67 @@ def test_buscar_por_titulo(mock_response):
     assert response.status_code == 200
     assert len(response.json()) == 3
 
+
+def test_filtrar_por_genero(mock_response):
+    # Mock de respuesta con datos reales
+    mock_response.get(
+        'http://localhost:5000/peliculas/genero/Acción',
+        json=[
+            {'id': 1, 'titulo': 'Indiana Jones', 'genero': 'Acción'},
+            {'id': 2, 'titulo': 'Star Wars', 'genero': 'Acción'}
+        ]
+    )
+    
+    response = requests.get('http://localhost:5000/peliculas/genero/Acción')
+    assert response.status_code == 200
+    assert len(response.json()) == 2  # Verificar que hay 2 películas de Acción
+
+
+def test_recomendar_feriado(mock_response):
+
+    mock_response.get(
+        'http://localhost:5000/recomendar/Acción',
+        json={
+            'feriado': 'Día de la Independencia',
+            'fecha': '9/7',
+            'tipo': 'Feriado Nacional',
+            'pelicula': {
+                'id': 1, 
+                'titulo': 'Indiana Jones', 
+                'genero': 'Acción'
+            }
+        }
+    )
+
+    response = requests.get('http://localhost:5000/recomendar/Acción')
+    assert response.status_code == 200
+    
+    data = response.json()
+    assert 'feriado' in data
+    assert 'fecha' in data
+    assert 'tipo' in data
+    assert 'pelicula' in data
+    assert data['pelicula']['genero'] == 'Acción'
+
+def test_sugerir_pelicula_aleatoria(mock_response):
+
+    mock_response.get(
+        'http://localhost:5000/peliculas/sugerir',
+        json={
+            'id': 1, 
+            'titulo': 'Indiana Jones', 
+            'genero': 'Acción'
+        }
+    )
+    
+    response = requests.get('http://localhost:5000/peliculas/sugerir')
+    
+    assert response.status_code == 200
+    
+    pelicula = response.json()
+    assert 'id' in pelicula
+    assert 'titulo' in pelicula
+    assert 'genero' in pelicula
+
+    assert pelicula['titulo'] == 'Indiana Jones'
+    assert pelicula['genero'] == 'Acción'

@@ -1,5 +1,14 @@
 import requests
 
+BASE_URL = 'http://localhost:5000'
+
+def print_response(label, response):
+    print(f"\n{label} ({response.status_code}):")
+    try:
+        print(response.json())
+    except:
+        print(response.text)
+
 # Obtener todas las películas
 response = requests.get('http://localhost:5000/peliculas')
 peliculas = response.json()
@@ -77,3 +86,22 @@ if response.status_code == 200:
 else:
     print("Error al obtener los detalles de la película.")
 print()
+
+# Filtrar por género
+response = requests.get(f'{BASE_URL}/peliculas/genero/Aventura')
+print_response("Películas de Aventura", response)
+
+# Recomendación para feriado
+response = requests.get(f'{BASE_URL}/recomendar/Acción?tipo=inmovable')
+print_response("Recomendar para feriado", response)
+
+# Test para sugerir película aleatoria
+response = requests.get(f'{BASE_URL}/peliculas/sugerir')
+print_response("Sugerir película aleatoria", response)
+
+if response.status_code == 200:
+    pelicula = response.json()
+    print("Detalles de la película sugerida:")
+    print(f"ID: {pelicula['id']}, Título: {pelicula['titulo']}, Género: {pelicula['genero']}")
+else:
+    print("Error al sugerir película aleatoria.")

@@ -1,4 +1,7 @@
 from flask import Flask, jsonify, request
+import random
+from proximo_feriado import NextHoliday
+
 
 app = Flask(__name__)
 peliculas = [
@@ -75,7 +78,6 @@ def obtener_nuevo_id():
     else:
         return 1
 
-
 app.add_url_rule('/peliculas', 'obtener_peliculas', obtener_peliculas, methods=['GET'])
 app.add_url_rule('/peliculas/<int:id>', 'obtener_pelicula', obtener_pelicula, methods=['GET'])
 app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['POST'])
@@ -98,6 +100,52 @@ def sugerir_pelicula_aleatoria_genero(genero):
     pelicula_seleccionada = random.choice(peliculas_filtradas)
 
     return jsonify(pelicula_seleccionada), 200 # Exito
+
+@app.route('/peliculas/genero/<string:genero>', methods=['GET'])
+def filtrar_por_genero(genero):
+    resultado = [p for p in peliculas if p['genero'].lower() == genero.lower()]
+    if not resultado:
+        return make_response(jsonify({'error': f"Género '{genero}' no encontrado"}), 404)
+    return jsonify(resultado)
+
+@app.route('/recomendar/<string:genero>', methods=['GET'])
+def recomendar_feriado(genero):
+    try:
+        tipo_feriado = request.args.get('tipo', None)  # Obtener tipo desde query params
+        next_holiday = NextHoliday()
+        next_holiday.fetch_holidays(tipo=tipo_feriado)  # Pasar el tipo
+        
+        if not next_holiday.holiday:
+            return jsonify({'error': 'No se encontraron feriados'}), 404
+        
+        opciones = [p for p in peliculas if p['genero'].lower() == genero.lower()]
+        if not opciones:
+            return jsonify({'error': 'No hay películas de este género'}), 404
+        
+        pelicula = random.choice(opciones)
+        return jsonify({
+            'feriado': next_holiday.holiday['motivo'],
+            'fecha': f"{next_holiday.holiday['dia']}/{next_holiday.holiday['mes']}",
+            'tipo': next_holiday.holiday['tipo'],  # Incluir tipo en respuesta
+            'pelicula': pelicula
+        }), 200
+    except Exception as e:
+        return jsonify({'error': f'Error interno: {str(e)}'}), 500
+
+@app.route('/peliculas/sugerir', methods=['GET'])
+def sugerir_aleatoria():
+    if not peliculas:
+        return jsonify({'error': 'No hay películas disponibles'}), 404
+    try:
+        pelicula_sugerida = random.choice(peliculas)
+        return jsonify(pelicula_sugerida), 200
+    
+    except Exception as e:
+        return jsonify({
+            'error': 'Error interno al sugerir película', 
+            'detalle': str(e)
+        }), 500
+    
 
 if __name__ == '__main__':
     app.run()
