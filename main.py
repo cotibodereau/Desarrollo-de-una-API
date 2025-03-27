@@ -178,7 +178,7 @@ def sugerir_pelicula_aleatoria_genero(genero):
     """
 
     # Filtrar películas por género (ignorando mayúsculas/minúsculas)
-   peliculas_filtradas = [pelicula for pelicula in peliculas if pelicula['genero'].lower() == genero.lower()]
+    peliculas_filtradas = [pelicula for pelicula in peliculas if pelicula['genero'].lower() == genero.lower()]
 
     if not peliculas_filtradas:
         return jsonify({"error": "No se encontraron películas para ese género"}), 404
