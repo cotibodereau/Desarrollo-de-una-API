@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "d9782044-5ab8-4291-99af-f1090d0bd605",
+		"name": "lab 1 redes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "43348903"
+	},
+	"item": [
+		{
+			"name": "obtener peliculas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/peliculas"
+			},
+			"response": []
+		},
+		{
+			"name": "obtener pelicula id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/peliculas/1"
+			},
+			"response": []
+		},
+		{
+			"name": "obtener peli x genero",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/peliculas/genero/Drama"
+			},
+			"response": []
+		},
+		{
+			"name": "obtener peli titulo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/peliculas/buscar?titulo=ind",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"peliculas",
+						"buscar"
+					],
+					"query": [
+						{
+							"key": "titulo",
+							"value": "ind"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obtener peli random",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/peliculas/sugerir"
+			},
+			"response": []
+		},
+		{
+			"name": "obtener peli random x genero",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/peliculas/sugerir/Drama"
+			},
+			"response": []
+		},
+		{
+			"name": "obtener peli por feriado",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/recomendar/Drama"
+			},
+			"response": []
+		},
+		{
+			"name": "nueva peli",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"titulo\": \"Son como niños 5\",\n  \"genero\": \"Comedia\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/peliculas"
+			},
+			"response": []
+		},
+		{
+			"name": "eliminar peli",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:5000/peliculas/4"
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar pelicula",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"titulo\": \"Billie Eilish\",\n    \"genero\": \"Musical\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/peliculas/8"
+			},
+			"response": []
+		}
+	]
+}
