@@ -49,3 +49,48 @@ def test_eliminar_pelicula(client):
     assert 'mensaje' in data
     response = client.get('/peliculas/1')
     assert response.status_code == 404
+
+def test_buscar_por_titulo(client):
+    response = client.get('/peliculas/buscar?titulo=in')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, list)
+    # Verifica que la búsqueda devuelva al menos una película
+    assert len(data) > 0
+
+def test_sugerir_por_genero(client):
+    response = client.get('/peliculas/sugerir/Drama')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, dict)
+    assert len(data) > 0
+    assert 'Drama' in data['genero']
+
+def test_sugerir_aleatoria(client):
+    response = client.get('/peliculas/sugerir/Drama')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, dict)
+    assert 'titulo' in data
+    assert 'genero' in data
+    assert 'Drama' in data['genero']
+    # Verifica que la película sugerida sea del género correcto
+
+def test_sugerir_aleatoria_genero(client):
+    response = client.get('/peliculas/sugerir/Drama')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, dict)
+    assert 'titulo' in data
+    assert 'genero' in data
+    assert 'Drama' in data['genero']
+    # Verifica que la película sugerida sea del género correcto
+
+
+def test_recomendar_feriado_genero(client):
+    response = client.get('/recomendar/Drama')
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, dict)
+    # Verifica que la recomendación devuelva al menos una película
+    assert len(data) > 0
